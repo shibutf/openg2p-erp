@@ -7,3 +7,4 @@ from . import openg2p_beneficiary
 from . import openg2p_program
 from . import openg2p_program_enrollment_category
 from . import openg2p_program_enrollment
+from . import openg2p_program_enrollment_import

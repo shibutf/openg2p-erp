@@ -112,7 +112,7 @@ class ProgramEnrollment(models.Model):
                     )
                 )
 
-            if c.date_start > c.program_id.date_start:
+            if c.date_start < c.program_id.date_start:
                 raise ValidationError(
                     _(
                         "Program Enrollment start date must not be earlier  than program's start date."
