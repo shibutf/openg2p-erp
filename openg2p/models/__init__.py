@@ -10,6 +10,7 @@ from . import openg2p_beneficiary_exception_type
 from . import openg2p_beneficiary_id_category
 from . import openg2p_beneficiary_id_number
 from . import openg2p_location
+from . import openg2p_import
 from . import res_company
 from . import res_config_settings
 from . import res_country_state
