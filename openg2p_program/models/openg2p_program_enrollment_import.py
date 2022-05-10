@@ -9,6 +9,11 @@ _logger = logging.getLogger(__name__)
 
 should_create_beneficiary = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_SHOULD_CREATE_BENEFICIARY","false")
 beneficiary_base_id_type = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID", None)
+beneficiary_base_id_label = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID_LABEL", "Related Base ID")
+create_beneficiary_default_street = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_STREET", "Electronic City")
+create_beneficiary_default_city = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_CITY", "Bengaluru")
+create_beneficiary_default_state = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_STATE", "Karnataka")
+create_beneficiary_default_country = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_COUNTRY", "India")
 
 
 class ProgramEnrollmentImport(models.Model):
@@ -20,7 +25,20 @@ class ProgramEnrollmentImport(models.Model):
     total_ammount = fields.Float(
         string="Total Remuneration", required=False, default=0.0
     )
+    related_ben_base_id = fields.Char(compute="_compute_related_base_id", store=False, string=beneficiary_base_id_label)
+    related_ben_street = fields.Char(related="beneficiary_id.street")
+    related_ben_city = fields.Char(related="beneficiary_id.city")
+    related_ben_state = fields.Many2one(related="beneficiary_id.state_id")
+    related_ben_country = fields.Many2one(related="beneficiary_id.country_id")
+    related_ben_programs = fields.Many2many(string="Beneficiary Listed Programs", related="beneficiary_id.program_ids", store=False)
 
+    @api.depends("beneficiary_id")
+    def _compute_related_base_id(self):
+        for record in self:
+            for iden in record.beneficiary_id.identities:
+                if iden.category_id.code == beneficiary_base_id_type:
+                    _logger.info("Identity FOUND!! "+str(iden.name))
+                    record.related_ben_base_id = iden.name
 
     @api.multi
     def import_models(self, fields, columns, options, data_generator, dryrun=False):
@@ -157,23 +175,7 @@ class ProgramEnrollmentImport(models.Model):
         return response
 
     def create_ben_with_data(self, ben_base_id, ben_base_id_cat, row_data):
-        display_name = row_data[self._fields["beneficiary_id"].string]
-        first_name = display_name.split(" ", 1)[0]
-        last_name = display_name.split(" ", 1)[1].split(" (", 1)[0]
-        street = row_data["street"]
-        city = row_data[self.env["openg2p.beneficiary"]._fields["city"].string]
-        state = row_data[self.env["openg2p.beneficiary"]._fields["state_id"].string]
-        country = row_data[self.env["openg2p.beneficiary"]._fields["country_id"].string]
-        country_id = self.env["res.country"].search([("name", "=", country)], limit=1).id
-        state_id = self.env["res.country.state"].search([("name", "=", state), ("country_id", "=", country_id)], limit=1).id
-        data = {
-            "firstname": first_name,
-            "lastname": last_name,
-            "street": street,
-            "city": city,
-            "state_id": state_id,
-            "country_id": country_id,
-        }
+        data = self.prepare_data_ben(ben_base_id, row_data)
         ben = self.env["openg2p.beneficiary"].create(data)
         if beneficiary_base_id_type:
             return self.env["openg2p.beneficiary.id_number"].create(
@@ -183,20 +185,33 @@ class ProgramEnrollmentImport(models.Model):
                     "beneficiary_id": ben.id
                 }
             )
-        
         return None
-
+    
     def merge_ben_with_data(self, existing_ben_base_id, row_data):
-        display_name = row_data[self._fields["beneficiary_id"].string]
-        first_name = display_name.split(" ", 1)[0]
-        last_name = display_name.split(" ", 1)[1].split(" (", 1)[0]
-        street = row_data["street"]
-        city = row_data[self.env["openg2p.beneficiary"]._fields["city"].string]
-        state = row_data[self.env["openg2p.beneficiary"]._fields["state_id"].string]
-        country = row_data[self.env["openg2p.beneficiary"]._fields["country_id"].string]
+        data = self.prepare_data_ben(existing_ben_base_id.name, row_data)
+        existing_ben_base_id.beneficiary_id.write(data)
+        return existing_ben_base_id
+    
+    def prepare_data_ben(self, ben_base_id, row_data):
+        street_label = self.env["openg2p.beneficiary"]._fields["street"].string
+        state_label = self.env["openg2p.beneficiary"]._fields["state_id"].string
+        country_label = self.env["openg2p.beneficiary"]._fields["country_id"].string
+        city_label = self.env["openg2p.beneficiary"]._fields["city"].string
+        display_name_label = self._fields["beneficiary_id"].string
+
+        street = row_data[street_label] if street_label in row_data.keys() else create_beneficiary_default_street
+        city = row_data[city_label] if city_label in row_data.keys() else create_beneficiary_default_city
+        state = row_data[state_label].split(" (", 1)[0] if state_label in row_data.keys() else create_beneficiary_default_state
+        country = row_data[country_label] if country_label in row_data.keys() else create_beneficiary_default_country
+
         country_id = self.env["res.country"].search([("name", "=", country)], limit=1).id
         state_id = self.env["res.country.state"].search([("name", "=", state), ("country_id", "=", country_id)], limit=1).id
-        data = {
+
+        display_name = row_data[display_name_label] if display_name_label in row_data.keys() else (str(ben_base_id) + " _")
+        first_name = display_name.split(" ", 1)[0]
+        last_name = display_name.split(" ", 1)[1].split(" (", 1)[0]
+        
+        return {
             "firstname": first_name,
             "lastname": last_name,
             "street": street,
@@ -204,8 +219,6 @@ class ProgramEnrollmentImport(models.Model):
             "state_id": state_id,
             "country_id": country_id,
         }
-        existing_ben_base_id.beneficiary_id.write(data)
-        return existing_ben_base_id
     
     def get_state_key_from_value(self, value):
         for k,v in self._fields["state"].selection:

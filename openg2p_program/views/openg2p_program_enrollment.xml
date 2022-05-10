@@ -118,11 +118,13 @@
         <field name="arch" type="xml">
             <!-- <tree string="Program Enrollments" decoration-bf="message_needaction == True" create="0" import="0"> -->
             <tree string="Program Enrollments" decoration-bf="message_needaction == True" create="0">
-                <!-- <xpath expr="//[@name='base_import.o_import_import']" position="replace">
-                    <button name="my_random_button" string="MY IMPORT"/>
-                </xpath> -->
                 <!-- <field name="name"/> -->
                 <field name="beneficiary_id"/>
+                <field name="related_ben_base_id"/>
+                <field name="related_ben_street"/>
+                <field name="related_ben_city"/>
+                <field name="related_ben_state"/>
+                <field name="related_ben_country"/>
                 <field name="program_id"/>
                 <!-- <field name="category_id"/> -->
                 <field name="date_start"/>
