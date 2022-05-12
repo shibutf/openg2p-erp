@@ -28,8 +28,6 @@ def _lang_get(self):
 
 
 _PARTNER_FIELDS = [
-    "firstname",
-    "lastname",
     "street",
     "street2",
     "zip",

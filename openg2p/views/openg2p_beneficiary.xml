@@ -62,17 +62,17 @@
             <field name="model">openg2p.beneficiary</field>
             <field name="arch" type="xml">
                 <tree string="Beneficiaries" decoration-bf="message_needaction==True"
-                      decoration-muted="active == False">
-                    <field name="display_name" string="Name"/>
-                    <field name="phone" class="o_force_ltr"/>
+                      decoration-muted="active == False" import="0">
+                    <field name="firstname" string="Tax ID"/>
+                    <field name="phone" class="o_force_ltr" invisible="1"/>
                     <field name="location_id" options="{'no_create_edit': True}" invisible="1"/>
-                    <field name="category_id" widget="many2many_tags"
+                    <field name="category_id" invisible="1" widget="many2many_tags"
                            options="{'color_field': 'color', 'no_create_edit': True}"
                            placeholder="Tags..."/>
-                    <field name="regression_and_progression" string="Regression &amp; Progression (A)"/>
+                    <!-- <field name="regression_and_progression" string="Regression &amp; Progression (A)"/>
                     <field name="total_quality" string="Total Quality (B)"/>
                     <field name="total_equity" string="Total Equity (C)"/>
-                    <field name="grand_total"/>
+                    <field name="grand_total"/> -->
                     <field name="country_id" invisible="1"/>
                     <field name="active" invisible="1"/>
                     <field name="message_needaction" invisible="1"/>
@@ -368,7 +368,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">openg2p.beneficiary</field>
             <field name="view_type">form</field>
-            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="view_mode">tree,kanban,form,activity</field>
             <field name="search_view_id" ref="view_openg2p_beneficiary_filter"/>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">

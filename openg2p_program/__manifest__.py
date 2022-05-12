@@ -18,6 +18,7 @@
         "wizard/enroll_beneficiary.xml",
     ],
     "demo": ["data/openg2p_program_demo.xml"],
+    "qweb": ["static/src/xml/custom_buttons.xml"],
     "installable": True,
     "auto_install": True,
 }

@@ -1,6 +1,7 @@
 import os
 import logging
 import itertools
+import time
 
 from odoo import api, models, fields
 from odoo.exceptions import ValidationError
@@ -10,8 +11,8 @@ _logger = logging.getLogger(__name__)
 should_create_beneficiary = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_SHOULD_CREATE_BENEFICIARY","false")
 beneficiary_base_id_type = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID", None)
 beneficiary_base_id_label = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID_LABEL", "Related Base ID")
-create_beneficiary_default_street = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_STREET", "Electronic City")
-create_beneficiary_default_city = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_CITY", "Bengaluru")
+create_beneficiary_default_street = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_STREET", "-")
+create_beneficiary_default_city = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_CITY", "-")
 create_beneficiary_default_state = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_STATE", "Karnataka")
 create_beneficiary_default_country = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CREATE_BENEFICIARY_DEFAULT_COUNTRY", "India")
 
@@ -26,10 +27,6 @@ class ProgramEnrollmentImport(models.Model):
         string="Total Remuneration", required=False, default=0.0
     )
     related_ben_base_id = fields.Char(compute="_compute_related_base_id", store=False, string=beneficiary_base_id_label)
-    related_ben_street = fields.Char(related="beneficiary_id.street")
-    related_ben_city = fields.Char(related="beneficiary_id.city")
-    related_ben_state = fields.Many2one(related="beneficiary_id.state_id")
-    related_ben_country = fields.Many2one(related="beneficiary_id.country_id")
     related_ben_programs = fields.Many2many(string="Beneficiary Listed Programs", related="beneficiary_id.program_ids", store=False)
 
     @api.depends("beneficiary_id")
@@ -37,7 +34,7 @@ class ProgramEnrollmentImport(models.Model):
         for record in self:
             for iden in record.beneficiary_id.identities:
                 if iden.category_id.code == beneficiary_base_id_type:
-                    _logger.info("Identity FOUND!! "+str(iden.name))
+                    # _logger.info("Identity FOUND!! "+str(iden.name))
                     record.related_ben_base_id = iden.name
 
     @api.multi
@@ -69,12 +66,19 @@ class ProgramEnrollmentImport(models.Model):
             total_count += 1
             row_data = dict(zip(columns, row))
 
-            program_name = row_data[self._fields["program_id"].string]
-            enrol_date_start = row_data[self._fields["date_start"].string]
-            enrol_date_end = row_data[self._fields["date_end"].string]
-            enrol_program_ammount = row_data[self._fields["program_ammount"].string]
-            enrol_total_ammount = row_data[self._fields["total_ammount"].string]
-            enrol_state = row_data[self._fields["state"].string]
+            program_id_label = self._fields["program_id"].string
+            date_start_label = self._fields["date_start"].string
+            date_end_label = self._fields["date_end"].string
+            ammount_label = self._fields["program_ammount"].string
+            total_ammount_label = self._fields["total_ammount"].string
+            state_label = self._fields["state"].string
+
+            program_name = row_data[program_id_label] if program_id_label in row_data.keys() else None
+            enrol_date_start = row_data[date_start_label] if date_start_label in row_data.keys() else None
+            enrol_date_end = row_data[date_end_label] if date_end_label in row_data.keys() else None
+            enrol_program_ammount = row_data[ammount_label] if ammount_label in row_data.keys() else None
+            enrol_total_ammount = row_data[total_ammount_label] if total_ammount_label in row_data.keys() else None
+            enrol_state = row_data[state_label] if state_label in row_data.keys() else None
 
             existing_bens = None
 
@@ -103,7 +107,7 @@ class ProgramEnrollmentImport(models.Model):
                         ben_error_count += 1
                 elif len(existing_bens) == 1 and should_create_beneficiary == "true":
                     try:
-                        self.merge_ben_with_data(existing_bens, row_data)
+                        # self.merge_ben_with_data(existing_bens, row_data)
                         ben_merge_count += 1
                     except Exception as e:
                         error_messages.append({
@@ -119,6 +123,8 @@ class ProgramEnrollmentImport(models.Model):
                     raise ValidationError("Improper Beneficiary Data found in db")
             
             # checking if the current program enrollment exists and creating/merging accordingly
+            if not program_name:
+                continue
             program_id = self.env["openg2p.program"].search([("name", "=", program_name)], limit=1)
             existing_enrols = self.search([("program_id", "=", program_id.id),("beneficiary_id", "=", existing_bens.beneficiary_id.id)])
             if len(existing_enrols) == 0:
@@ -126,11 +132,11 @@ class ProgramEnrollmentImport(models.Model):
                     enrol = self.create({
                         "program_id": program_id.id,
                         "beneficiary_id": existing_bens.beneficiary_id.id,
-                        "date_start": enrol_date_start,
+                        "date_start": enrol_date_start if enrol_date_start else program_id.date_start,
                         "date_end": enrol_date_end if enrol_date_end else program_id.date_end,
-                        "program_ammount": enrol_program_ammount,
-                        "total_ammount": enrol_total_ammount,
-                        "state": self.get_state_key_from_value(enrol_state)
+                        "program_ammount": enrol_program_ammount if enrol_program_ammount else 0.0,
+                        "total_ammount": enrol_total_ammount if enrol_total_ammount else 0.0,
+                        "state": self.get_state_key_from_value(enrol_state) if enrol_state else "open"
                     })
                     success_ids.append(enrol.id)
                     enrol_create_count += 1
@@ -146,11 +152,11 @@ class ProgramEnrollmentImport(models.Model):
                     existing_enrols.write({
                         "program_id": program_id.id,
                         "beneficiary_id": existing_bens.beneficiary_id.id,
-                        "date_start": enrol_date_start,
+                        "date_start": enrol_date_start if enrol_date_start else program_id.date_start,
                         "date_end": enrol_date_end if enrol_date_end else program_id.date_end,
-                        "program_ammount": enrol_program_ammount,
-                        "total_ammount": enrol_total_ammount,
-                        "state": self.get_state_key_from_value(enrol_state)
+                        "program_ammount": enrol_program_ammount if enrol_program_ammount else 0.0,
+                        "total_ammount": enrol_total_ammount if enrol_total_ammount else 0.0,
+                        "state": self.get_state_key_from_value(enrol_state) if enrol_state else "open"
                     })
                     success_ids.append(existing_enrols.id)
                     enrol_merge_count += 1
@@ -167,12 +173,10 @@ class ProgramEnrollmentImport(models.Model):
 
         # return super(ProgramEnrollmentImport, self).do(fields, columns, options, dryrun)
         _logger.info("Import Complete. Total Records Updated: %d. Enrollments Created: %d. Enrollments Merged: %d. Error Enrollments: %d. Beneficaries Created: %d. Beneficaries Merged: %d. Error Beneficaries: %d." % (total_count, enrol_create_count, enrol_merge_count, enrol_error_count, ben_create_count, ben_merge_count, ben_error_count))
-        response = {
+        return {
+            'ids': success_ids if success_ids else [],
             'messages': error_messages
         }
-        if len(success_ids)>0:
-            response['ids'] = success_ids
-        return response
 
     def create_ben_with_data(self, ben_base_id, ben_base_id_cat, row_data):
         data = self.prepare_data_ben(ben_base_id, row_data)
