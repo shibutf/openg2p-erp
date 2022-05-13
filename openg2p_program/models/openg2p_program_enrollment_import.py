@@ -125,7 +125,11 @@ class ProgramEnrollmentImport(models.Model):
             # checking if the current program enrollment exists and creating/merging accordingly
             if not program_name:
                 continue
-            program_id = self.env["openg2p.program"].search([("name", "=", program_name)], limit=1)
+            
+            program_id = self.env["openg2p.program"].search([("name", "=", program_name),('create_uid','=', self.env.user.id)], limit=1)
+            if len(program_id) == 0:
+                continue
+
             existing_enrols = self.search([("program_id", "=", program_id.id),("beneficiary_id", "=", existing_bens.beneficiary_id.id)])
             if len(existing_enrols) == 0:
                 try:
