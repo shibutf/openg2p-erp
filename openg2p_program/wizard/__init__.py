@@ -4,3 +4,6 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from . import enroll_beneficiary
+from . import enroll_beneficiary_program_enrollment
+from . import disenroll_beneficiary
+from . import disenroll_beneficiary_program_enrollment

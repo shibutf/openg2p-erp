@@ -33,6 +33,9 @@ class Beneficiary(models.Model):
         program_id,
         category_id=None,
         date_start=fields.Date.today(),
+        date_end=None,
+        program_amount=0.0,
+        total_amount=0.0,
         confirm=False,
         raise_error=True,
     ):
@@ -45,6 +48,9 @@ class Beneficiary(models.Model):
                     "beneficiary_id": rec.id,
                     "category_id": category_id,
                     "date_start": date_start,
+                    "date_end": date_end,
+                    "program_amount": program_amount,
+                    "total_amount": total_amount,
                 }
             )
         if confirm:

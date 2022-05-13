@@ -25,6 +25,7 @@
                 <field name="date_end"/>
                 <field name="beneficiary_id"/>
                 <field name="state"/>
+                <field name="related_ben_programs"/>
                 <separator/>
                 <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
                 <separator/>
@@ -125,8 +126,8 @@
                 <!-- <field name="category_id"/> -->
                 <field name="date_start"/>
                 <field name="date_end"/>
-                <field name="program_ammount"/>
-                <field name="total_ammount"/>
+                <field name="program_amount"/>
+                <field name="total_amount"/>
                 <field name="state"/>
                 <field name="message_needaction" invisible="1"/>
             </tree>
@@ -207,9 +208,4 @@
         action="action_openg2p_program_enrollment"
         sequence="13"/>
     
-    <template id="program_enrol_assets_backend" name="program_enrol assets" inherit_id="web.assets_backend">
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="/openg2p_program/static/src/js/custom_buttons.js"/>
-        </xpath>
-    </template>
 </odoo>

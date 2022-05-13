@@ -40,13 +40,13 @@
             </field>
         </record>
 
-        <act_window id="deregistration_wizard_action"
+        <!-- <act_window id="deregistration_wizard_action"
                     name="Disenroll Beneficiaries"
                     src_model="openg2p.beneficiary"
                     res_model="wiz.deregistration"
                     view_type="form" view_mode="form"
                     key2="client_action_multi" target="new"
-                    groups="openg2p_registration.group_openg2p_registration_user"/>
+                    groups="openg2p_registration.group_openg2p_registration_user"/> -->
 
     </data>
 </odoo>
