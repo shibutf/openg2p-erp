@@ -20,7 +20,7 @@ class DisenrollWizard(models.TransientModel):
     #     string="Classification",
     # )
     date_end = fields.Date(
-        "Enrollment Date",
+        "Disenroll Date",
         required=False,
         help="End Date of the program enrollment.",
     )
@@ -44,7 +44,7 @@ class DisenrollWizard(models.TransientModel):
             existing_enrols = self.env["openg2p.program.enrollment"].search([("beneficiary_id","=",record.id),("program_id","=",self.program_id.id)])
             # the following size is one anyway
             for enrol in existing_enrols:
-                disenrol_dict = []
+                disenrol_dict = {}
                 disenrol_dict["state"] = "close"
                 if self.date_end:
                     disenrol_dict["date_end"] = self.date_end
