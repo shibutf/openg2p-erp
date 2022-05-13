@@ -21,7 +21,7 @@ class ProgramEnrollmentDisenrollWizard(models.TransientModel):
             program_enrols = program_enrols.sudo().with_delay()
 
         for record in program_enrols:
-            disenrol_dict = []
+            disenrol_dict = {}
             disenrol_dict["state"] = "close"
             if self.date_end:
                 disenrol_dict["date_end"] = self.date_end

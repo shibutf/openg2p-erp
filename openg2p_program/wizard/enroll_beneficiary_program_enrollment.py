@@ -24,13 +24,13 @@ class ProgramEnrollmentEnrollWizard(models.TransientModel):
             enrol_exists = self.env["openg2p.program.enrollment"].search(
                 [
                     ("beneficiary_id","=",record.beneficiary_id.id),
-                    ("program_id","=",record.program_id.id),
+                    ("program_id","=",self.program_id.id),
                     ("state","=","open"),
                 ], limit=1)
             if len(enrol_exists) == 0:
                 record.beneficiary_id.program_enroll(
                     program_id=self.program_id.id,
-                    category_id=self.category_id.id,
+                    #category_id=self.category_id.id,
                     date_start=self.date_start,
                     date_end=self.date_end if self.date_end else self.program_id.date_end,
                     program_amount=self.program_amount,

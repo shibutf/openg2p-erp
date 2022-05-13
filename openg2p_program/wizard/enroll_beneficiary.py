@@ -55,7 +55,7 @@ class EnrollWizard(models.TransientModel):
 
         beneficiaries.program_enroll(
             program_id=self.program_id.id,
-            category_id=self.category_id.id,
+            #category_id=self.category_id.id,
             date_start=self.date_start,
             date_end=self.date_end if self.date_end else self.program_id.date_end,
             program_amount=self.program_amount,
