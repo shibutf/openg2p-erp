@@ -20,10 +20,10 @@ create_beneficiary_default_country = os.getenv("PROGRAM_ENROLLMENT_ON_IMPORT_CRE
 class ProgramEnrollmentImport(models.Model):
     _inherit = "openg2p.program.enrollment"
 
-    program_ammount = fields.Float(
-        string="Ammount", required=False, default=0.0
+    program_amount = fields.Float(
+        string="Amount", required=False, default=0.0
     )
-    total_ammount = fields.Float(
+    total_amount = fields.Float(
         string="Total Remuneration", required=False, default=0.0
     )
     related_ben_base_id = fields.Char(compute="_compute_related_base_id", store=False, string=beneficiary_base_id_label)
@@ -69,15 +69,15 @@ class ProgramEnrollmentImport(models.Model):
             program_id_label = self._fields["program_id"].string
             date_start_label = self._fields["date_start"].string
             date_end_label = self._fields["date_end"].string
-            ammount_label = self._fields["program_ammount"].string
-            total_ammount_label = self._fields["total_ammount"].string
+            amount_label = self._fields["program_amount"].string
+            total_amount_label = self._fields["total_amount"].string
             state_label = self._fields["state"].string
 
             program_name = row_data[program_id_label] if program_id_label in row_data.keys() else None
             enrol_date_start = row_data[date_start_label] if date_start_label in row_data.keys() else None
             enrol_date_end = row_data[date_end_label] if date_end_label in row_data.keys() else None
-            enrol_program_ammount = row_data[ammount_label] if ammount_label in row_data.keys() else None
-            enrol_total_ammount = row_data[total_ammount_label] if total_ammount_label in row_data.keys() else None
+            enrol_program_amount = row_data[amount_label] if amount_label in row_data.keys() else None
+            enrol_total_amount = row_data[total_amount_label] if total_amount_label in row_data.keys() else None
             enrol_state = row_data[state_label] if state_label in row_data.keys() else None
 
             existing_bens = None
@@ -134,8 +134,8 @@ class ProgramEnrollmentImport(models.Model):
                         "beneficiary_id": existing_bens.beneficiary_id.id,
                         "date_start": enrol_date_start if enrol_date_start else program_id.date_start,
                         "date_end": enrol_date_end if enrol_date_end else program_id.date_end,
-                        "program_ammount": enrol_program_ammount if enrol_program_ammount else 0.0,
-                        "total_ammount": enrol_total_ammount if enrol_total_ammount else 0.0,
+                        "program_amount": enrol_program_amount if enrol_program_amount else 0.0,
+                        "total_amount": enrol_total_amount if enrol_total_amount else 0.0,
                         "state": self.get_state_key_from_value(enrol_state) if enrol_state else "open"
                     })
                     success_ids.append(enrol.id)
@@ -154,8 +154,8 @@ class ProgramEnrollmentImport(models.Model):
                         "beneficiary_id": existing_bens.beneficiary_id.id,
                         "date_start": enrol_date_start if enrol_date_start else program_id.date_start,
                         "date_end": enrol_date_end if enrol_date_end else program_id.date_end,
-                        "program_ammount": enrol_program_ammount if enrol_program_ammount else 0.0,
-                        "total_ammount": enrol_total_ammount if enrol_total_ammount else 0.0,
+                        "program_amount": enrol_program_amount if enrol_program_amount else 0.0,
+                        "total_amount": enrol_total_amount if enrol_total_amount else 0.0,
                         "state": self.get_state_key_from_value(enrol_state) if enrol_state else "open"
                     })
                     success_ids.append(existing_enrols.id)
