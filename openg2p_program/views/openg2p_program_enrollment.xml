@@ -207,9 +207,4 @@
         action="action_openg2p_program_enrollment"
         sequence="13"/>
     
-    <template id="program_enrol_assets_backend" name="program_enrol assets" inherit_id="web.assets_backend">
-        <xpath expr="." position="inside">
-            <script type="text/javascript" src="/openg2p_program/static/src/js/custom_buttons.js"/>
-        </xpath>
-    </template>
 </odoo>
