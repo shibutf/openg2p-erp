@@ -43,7 +43,7 @@
                     minutes<br/>
                 </div>
                 <group>
-                    <field name="program_id"/>
+                    <field name="program_id" domain="[('create_uid','=',uid)]"/>
                     <!-- <field name="category_id"/> -->
                     <field name="date_end"/>
                 </group>
