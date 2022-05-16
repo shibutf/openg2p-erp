@@ -37,6 +37,7 @@ class Program(models.Model):
         "during and epidermic. \n "
         "Social Net: Social payments made to beneficiaries",
         states={"draft": [("readonly", False)]},
+        default="remuneration",
         readonly=True,
     )
     note = fields.Text("Description", states={"close": [("readonly", True)]})

@@ -146,7 +146,7 @@
             id="menu_openg2p_location_tree"
             parent="menu_openg2p_root"
             sequence="90"
-            groups="group_openg2p_officer"/>
+            groups="group_openg2p_officer,openg2p_program.group_openg2p_program_enrollment_manager"/>
 
 
 </odoo>

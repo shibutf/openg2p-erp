@@ -45,7 +45,7 @@
                 <group>
                     <field name="program_id" domain="[('create_uid','=',uid)]"/>
                     <!-- <field name="category_id"/> -->
-                    <field name="date_end"/>
+                    <!-- <field name="date_end"/> -->
                 </group>
                 <footer>
                     <button string="Apply" name="action_apply" type="object" class="btn-primary"/>
