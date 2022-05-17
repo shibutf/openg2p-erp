@@ -1,23 +1,23 @@
-﻿# ODK 
+﻿# ODK Installation and Setup
 ODK lets you build powerful forms to collect the data you need wherever it is.
 Central is the [ODK](https://getodk.org/) server. It manages user accounts and permissions, stores form definitions, and allows data collection clients like ODK Collect to connect to it for form download and submission upload.
 
 The installation procedure here is specifically targeting Linux (Ubuntu).
-# Installing ODK Central
+## Installing ODK Central
 
 ODK Central installation process will involve below tasks:
 1.  Obtain a domain name and setting up your server with ssl
 2.  Install ODK Central
 3.  Running ODK Central
 
-## Obtain a domain name and setting up your server with ssl
+### Obtain a domain name and setting up your server with ssl
 
 ODK Central demands that you should have a well qualified domain name and ssl for atleast few of its components like **Enketo** and the **Collect** mobile app.
 
 
-## Install ODK Central
+### Install ODK Central
 
-### Setup Docker
+#### Setup Docker
 First, you'll need to upgrade to docker-compose v1.28.3 or later. Follow these commands from [Docker's documentation](https://docs.docker.com/compose/install/#install-compose-on-linux-systems).
 
 	
@@ -27,46 +27,49 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
 	
-Next, we will want to ensure that Docker starts up whenever the server starts. Docker will in turn ensure that Central has started up. To do this, 
+Next, you would want to ensure that Docker starts up whenever the server starts. Docker will in turn ensure that Central has started up. To do this, run
 ```
-run systemctl enable docker.	
-```
-
-### UFW Configuration
-
-For a quick setup you may try out the disable ufw like below,
-```
-ufw disable
+systemctl enable docker.	
 ```
 
-If you keep the ufw running, please do ensure that the NGINX is given full access. 
-```
-sudo ufw allow 'Nginx HTTP'
+#### UFW Configuration
 
-```
-If you don't want to disable the firewall entirely, you can instead configure Docker, **iptables**, and **ufw** yourself.  Another option is to use an upstream network firewall.
+1. For a quick setup you may try out the disable ufw like below,
+	```
+	ufw disable
+	```
+
+2. If you keep the ufw running, please do ensure that the NGINX is given full access. 
+	```
+	sudo ufw allow 'Nginx HTTP'
+
+	```
+3. If you don't want to disable the firewall entirely, you can instead configure Docker, **iptables**, and **ufw** yourself.  Another option is to use an upstream network firewall.
 
 
-### Getting and Setting Up Central
+#### Getting and Setting Up ODK Central
 
-Now you'll need to download the software. In the server window, type 
-```
-git clone https://github.com/getodk/central 
-```
-and press Enter. It should think for some time and download many things. After which you can move into the directory.
-```
-cd central
-```
+Now you'll need to download the software. 
+
+1. In the server window, execute 
+	```
+	git clone https://github.com/getodk/central 
+	```
+
+2. Move into the directory
+	```
+	cd central
+	```
  
 
-You still have some components missing. Perform submodule update to fetch the submodules involved. 
-``` 
-git submodule update -i 
-```
+3. Perform submodule update to fetch the submodules involved. 
+	``` 
+	git submodule update -i 
+	```
 
-### Configure Central
+#### Configure ODK Central
 
-To configure **Central**, you may copy the template file and edit it.
+To configure **ODK Central**, you may copy the template file and edit it.
 ```
 mv .env.template .env
 nano .env
@@ -76,14 +79,14 @@ Change the `DOMAIN` line so that after the `=` is the domain name you registered
 
 Change the `SYSADMIN_EMAIL` line so that after the `=` is your own email address. The Let's Encrypt service will use this address only to notify you if something is wrong with your security certificate.
 
-Leave the rest of the settings alone. If you have a custom security or network environment you are trying to integrate Central into, see the [advanced configuration](https://docs.getodk.org/central-install-digital-ocean/#central-install-digital-ocean-advanced) sections for more information on these options.
+Leave the rest of the settings alone. If you have a custom security or network environment you are trying to integrate ODK Central into, see the [advanced configuration](https://docs.getodk.org/central-install-digital-ocean/#central-install-digital-ocean-advanced) sections for more information on these options.
 
 Hold `Ctrl + x` to quit the text editor. Press `y` to indicate that you want to save the file, and then press Enter to confirm the file name. Do not change the file name.
 
-## Running ODK Central
+### Running ODK Central
 
 
-### Start Central Software
+#### Start ODK Central Software
 To start the server software please execute
 ```
 run docker-compose up -d 
@@ -97,33 +100,33 @@ docker-compose ps
 Under the `State` column, for the nginx row, you will want to see text that reads `Up` or `Up (healthy)`. If you see `Up (health: starting)`, give it a few minutes. If you see some other text, something has gone wrong. It is normal to see `Exit 0` for the `secrets` container.
 
 
-If your domain name has started working, you can visit it in a web browser to check that you get the Central management website.
+If your domain name has started working, you can visit it in a web browser to check that you get the ODK Central management website.
 
-### Setup User
+#### Setup User
 
 Ensure that you are in the `central` folder on your server. If you have not closed your console session from earlier, you should be fine. If you have just logged back into it, you'll want to run `cd central` to navigate to that folder.
 
-Run bellow command to create a user in ODK Central
+- Run bellow command to create a user in ODK Central
 
-```
-docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-create
-```
-Do substitute your email address as appropriate. Press Enter, and you will be asked for a password for this new account.
+	```
+	docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-create
+	```
+	Do substitute your email address as appropriate. Press Enter, and you will be asked for a password for this new account.
 
-The previous step created an account but did not make it an administrator. To do this, execute 
-```
-docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-promote
-``` 
+- To give administrator previlege to the user, run as below 
+	```
+	docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-promote
+	``` 
 
-You are done for now, but if you ever lose track of your password, you can always reset it by executing 
-```
-docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-set-password
-``` 
-As with account creation, you will be prompted for a new password after you press Enter.
+- To reset password, you may use the below command 
+	```
+	docker-compose exec service odk-cmd --email YOUREMAIL@ADDRESSHERE.com user-set-password
+	``` 
+	As with account creation, you will be prompted for a new password after you press Enter.
 
 
-### Using a Custom SSL Certificate
-By default, Central uses Let's Encrypt to obtain an SSL security certificate. For most users, this should work perfectly, but larger managed internal networks may have their own certificate trust infrastructure. To use your own custom SSL certificate rather than the automatic Let's Encrypt system:
+#### Using a Custom SSL Certificate
+By default, ODK Central uses Let's Encrypt to obtain an SSL security certificate. For most users, this should work perfectly, but larger managed internal networks may have their own certificate trust infrastructure. To use your own custom SSL certificate rather than the automatic Let's Encrypt system:
 1. Generate a `fullchain.pem` (`-out`) file which contains your certificate followed by any necessary intermediate certificate(s).
 2. Generate a privkey.pem (-keyout) file which contains the private key used to sign your certificate.
 3. Copy those files into `files/local/customssl/` within the repository root.
@@ -131,7 +134,7 @@ By default, Central uses Let's Encrypt to obtain an SSL security certificate. Fo
 5. Build and run: `docker-compose build nginx`, `docker-compose stop nginx`, `docker-compose up -d nginx`. If that doesn't work, you may need to first remove your old nginx container (`docker-compose rm nginx`).
 
 
-# ODK Collect
+## ODK Collect
 
 In case you want to try out on the ODK flow, you may goahead and install the mobile app [ODK Collect](https://play.google.com/store/apps/details?id=org.odk.collect.android&hl=en_IN&gl=US)
 
