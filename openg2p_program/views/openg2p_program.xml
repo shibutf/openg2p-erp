@@ -9,9 +9,9 @@
             <form string="Program">
                 <header>
                     <button name="action_activate" type="object" states="draft" string="Activate" class="oe_highlight"
-                            groups="openg2p_program.group_openg2p_program_enrollment_manager"/>
+                            groups="openg2p.group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager"/>
                     <button name="action_done" type="object" states="active" string="Close" confirm="Closing this program with also end all active beneficiary enrollments to this program"
-                            groups="openg2p_program.group_openg2p_program_enrollment_manager"/>
+                            groups="openg2p.group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,done"/>
                 </header>
                 <sheet string="Program">
