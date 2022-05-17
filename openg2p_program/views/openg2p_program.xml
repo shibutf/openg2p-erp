@@ -46,11 +46,11 @@
                             </div>
                         </group>
                     </group>
-                    <notebook>
-                        <page name="notes" string="Criteria">
-                            <field name="note" nolabel="1" placeholder="Description of program..."/>
-                        </page>
-                    </notebook>
+                    <group>
+                        <!-- <page name="notes" string="Criteria"> -->
+                        <field name="note" nolabel="1" placeholder="Description of program..."/>
+                        <!-- </page> -->
+                    </group>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"
