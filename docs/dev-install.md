@@ -1,6 +1,7 @@
 # Developer Installation and Setup
 
-This document contains installation and setup instructions for running Openg2p Modules locally.
+## Overview
+This document contains installation and setup instructions for running Openg2p locally on your machine.
 
 ## Pre-requisites
 
@@ -77,7 +78,7 @@ This document contains installation and setup instructions for running Openg2p M
 
 ## Notes
 
-- To increase odoo request timeout, use this following argument with the above run commands (Following limit is in seconds).
+- To increase odoo request timeout, use this following argument with the above run commands (below limit is in seconds).
     ```
     --limit-time-real=10000
     ```
