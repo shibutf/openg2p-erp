@@ -10,12 +10,12 @@ ODK Central installation process will involve below tasks:
 2.  Install ODK Central
 3.  Running ODK Central
 
-### Obtain a domain name and setting up your server with ssl
+### 1. Obtain a domain name and setting up your server with ssl
 
 ODK Central demands that you should have a well qualified domain name and ssl for atleast few of its components like **Enketo** and the **Collect** mobile app.
 
 
-### Install ODK Central
+### 2. Install ODK Central
 
 #### Setup Docker
 First, you'll need to upgrade to docker-compose v1.28.3 or later. Follow these commands from [Docker's documentation](https://docs.docker.com/compose/install/#install-compose-on-linux-systems).
@@ -83,7 +83,7 @@ Leave the rest of the settings alone. If you have a custom security or network e
 
 Hold `Ctrl + x` to quit the text editor. Press `y` to indicate that you want to save the file, and then press Enter to confirm the file name. Do not change the file name.
 
-### Running ODK Central
+### 3. Running ODK Central
 
 
 #### Start ODK Central Software
