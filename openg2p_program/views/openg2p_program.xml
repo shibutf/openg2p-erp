@@ -9,9 +9,9 @@
             <form string="Program">
                 <header>
                     <button name="action_activate" type="object" states="draft" string="Activate" class="oe_highlight"
-                            groups="openg2p.group_openg2p_manager"/>
+                            groups="openg2p.group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager"/>
                     <button name="action_done" type="object" states="active" string="Close" confirm="Closing this program with also end all active beneficiary enrollments to this program"
-                            groups="openg2p.group_openg2p_manager"/>
+                            groups="openg2p.group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,done"/>
                 </header>
                 <sheet string="Program">
@@ -35,7 +35,7 @@
                     <group>
                         <group>
                             <field name="code"/>
-                            <field name="type"/>
+                            <!-- <field name="type"/> -->
                         </group>
                         <group>
                             <label for="date_start" string="Period"/>
@@ -46,11 +46,11 @@
                             </div>
                         </group>
                     </group>
-                    <notebook>
-                        <page name="notes" string="Criteria">
-                            <field name="note" nolabel="1" placeholder="Description of program..."/>
-                        </page>
-                    </notebook>
+                    <group>
+                        <!-- <page name="notes" string="Criteria"> -->
+                        <field name="note" nolabel="1" placeholder="Description of program..."/>
+                        <!-- </page> -->
+                    </group>
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"

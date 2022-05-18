@@ -58,7 +58,7 @@
                 <header>
                     <button type="object" name="action_activate" string="Confirm"
                             class="oe_highlight"
-                            attrs="{'invisible': [('state','!=','draft')]}" group="openg2p.group_openg2p_manager"/>
+                            attrs="{'invisible': [('state','!=','draft')]}" group="openg2p_program.group_openg2p_program_enrollment_manager"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,open"/>
                 </header>
                 <sheet>
@@ -71,7 +71,7 @@
                         </button>
                         <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive"
                                 attrs="{'invisible':[('state','in',('close', 'cancel'))]}"
-                                group="openg2p.group_openg2p_manager">
+                                group="openg2p_program.group_openg2p_program_enrollment_manager">
                             <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
                         </button>
                     </div>
@@ -203,7 +203,7 @@
     <menuitem
         id="menu_openg2p_program_enrollment_root"
         name="Program Enrollments"
-        groups="openg2p.group_openg2p_manager,openg2p.group_openg2p_officer"
+        groups="openg2p.group_openg2p_manager,openg2p.group_openg2p_officer,openg2p_program.group_openg2p_program_enrollment_manager"
         parent="openg2p.menu_openg2p_root"
         action="action_openg2p_program_enrollment"
         sequence="13"/>

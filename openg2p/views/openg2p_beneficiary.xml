@@ -5,7 +5,7 @@
         <menuitem
                 id="menu_openg2p_root"
                 name="Beneficiaries"
-                groups="group_openg2p_manager,group_openg2p_officer"
+                groups="group_openg2p_manager,group_openg2p_officer,openg2p_program.group_openg2p_program_enrollment_manager"
                 web_icon="openg2p,static/description/icon.png"
                 sequence="10"/>
 
@@ -13,14 +13,14 @@
                 id="menu_openg2p_reporting_beneficiary"
                 name="Reporting"
                 parent="menu_openg2p_root"
-                groups="group_openg2p_manager,group_openg2p_officer"
+                groups="group_openg2p_manager,group_openg2p_officer,openg2p_program.group_openg2p_program_enrollment_manager"
                 sequence="99"/>
 
         <menuitem
                 id="menu_openg2p_configuration"
                 name="Configuration"
                 parent="menu_openg2p_root"
-                groups="group_openg2p_manager"
+                groups="group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager"
                 sequence="100"/>
 
 
@@ -94,7 +94,7 @@
                                     type="object">
                                 <field name="documents_count" widget="statinfo" string="Documents"/>
                             </button>
-                            <button name="toggle_active" type="object" groups="openg2p.group_openg2p_manager"
+                            <button name="toggle_active" type="object" groups="openg2p.group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager"
                                     class="oe_stat_button" icon="fa-archive">
                                 <field name="active" widget="boolean_button"
                                        options='{"terminology": "archive"}'/>
