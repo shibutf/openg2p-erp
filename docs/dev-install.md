@@ -1,4 +1,4 @@
-# Developer Installation and Setup
+# Openg2p Installation and Setup
 
 ## Overview
 This document contains installation and setup instructions for running Openg2p locally on your machine.
@@ -60,21 +60,69 @@ This document contains installation and setup instructions for running Openg2p l
     pip3 install -r odoo/requirements.txt
     pip3 install -r openg2p-erp/requirements.txt
     ```
+
+## Run as Developer
+The following section describes running openg2p as developer.
+
 - To run odoo (requires virtualenv to be active before running):
+  - These environment variables are required before running the following:
+    ```sh
+    export PROGRAM_ENROLLMENT_ON_IMPORT_SHOULD_CREATE_BENEFICIARY="true"
+    export PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID="taxid"
+    export PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID_LABEL="Tax ID"
+    ```
   - The following can also be done from the UI, in the "Apps" menu.
   - If running odoo for first time, (i.e., db not initialized), then run this
     ```sh
-    python3 odoo/odoo-bin -r openg2p -d openg2p -w <password for openg2p role/db-user> --addons-path=odoo/addons,openg2p-erp,openg2p-erp-community-addon -i base,odk-connector,openg2p_package
+    python3 odoo/odoo-bin -r openg2p -d openg2p -w <password for openg2p role/db-user> --addons-path=odoo/addons,openg2p-erp,openg2p-erp-community-addon -i base,odk-connector,openg2p_package --limit-time-real=10000
     ```
   - If db already initialized, but there is a change in any `model` or `view` of any module, then run this:
     ```sh
-    python3 odoo/odoo-bin -r openg2p -d openg2p -w <password for openg2p role/db-user> --addons-path=odoo/addons,openg2p-erp,openg2p-erp-community-addon -u <module list in which there are changes>
+    python3 odoo/odoo-bin -r openg2p -d openg2p -w <password for openg2p role/db-user> --addons-path=odoo/addons,openg2p-erp,openg2p-erp-community-addon -u <module list in which there are changes> --limit-time-real=10000
     ```
   - If there is no `model` or `view` change, but there is some other code change, then simply run this:
     ```sh
-    python3 odoo/odoo-bin -r openg2p -d openg2p -w <password for openg2p role/db-user> --addons-path=odoo/addons,openg2p-erp,openg2p-erp-community-addon
+    python3 odoo/odoo-bin -r openg2p -d openg2p -w <password for openg2p role/db-user> --addons-path=odoo/addons,openg2p-erp,openg2p-erp-community-addon --limit-time-real=10000
     ```
 - Launch `localhost:8069` on browser.
+- Upon initial login, as admin, navigate to "Beneficiaries" app. Then click on "Configuration" -> "Identifications". Create new Identification with:
+  - ID Name: `Tax ID` (Same as the env variable `PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID_LABEL`)
+  - Code: `taxid` (Same as the env variable `PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID`)
+
+## Run on Production
+The following section describes running openg2p on production or production-simulation envs.
+- These environment variables are required before running the following:
+    ```sh
+    export PROGRAM_ENROLLMENT_ON_IMPORT_SHOULD_CREATE_BENEFICIARY="true"
+    export PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID="taxid"
+    export PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID_LABEL="Tax ID"
+    ```
+- Then Run the following to initialize db.
+    ```
+    python3 odoo/odoo-bin \
+        -r openg2p \
+        -d openg2p \
+        -w <password for openg2p role/db-user> \
+        --addons-path=odoo/addons,openg2p-erp,openg2p-erp-community-addon \
+        -i base,odk-connector,openg2p_package \
+        --without-demo=all \
+        --no-database-list \
+        --stop-after-init
+    ```
+- Then run the following to start the server.
+    ```sh
+    python3 odoo/odoo-bin \
+        -r openg2p \
+        -d openg2p \
+        -w <password for openg2p role/db-user> \
+        --addons-path=odoo/addons,openg2p-erp,openg2p-erp-community-addon \
+        --without-demo=all \
+        --no-database-list
+    ```
+- Launch `localhost:8069` on browser.
+- Upon initial login, as admin, navigate to "Beneficiaries" app. Then click on "Configuration" -> "Identifications". Create new Identification with:
+  - ID Name: `Tax ID` (Same as the env variable `PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID_LABEL`)
+  - Code: `taxid` (Same as the env variable `PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID`)
 
 ## Notes
 
