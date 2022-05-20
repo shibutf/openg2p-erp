@@ -1144,3 +1144,29 @@ class Beneficiary(models.Model):
             data["merged_beneficiary_ids"] = merge_ids
             merges.toggle_active()
             self.write(data)
+
+    @api.multi
+    def fetch_user_tax_ids(self):
+
+        enroll_ben_objs = self.env["openg2p.program.enrollment"].search([('create_uid','=', self.env.user.id)])
+        ben_ids = []
+        for enroll_ben_obj in enroll_ben_objs:
+            ben_ids.append(enroll_ben_obj.beneficiary_id.id)
+
+        # Added below beneficiary additions for beneficiaris without any program association
+        ben_objs = self.env["openg2p.beneficiary"].search([('create_uid','=', self.env.user.id)])
+        for ben in ben_objs:
+            ben_ids.append(ben.id)
+
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Beneficiaries",
+            "res_model": "openg2p.beneficiary",
+            "view_type": "form",
+            "view_mode": "tree,kanban,form,activity",
+            "domain": [('id','in',(ben_ids))],
+            "search_view_id": self.env.ref('view_openg2p_beneficiary_filter', ''),
+            "help": '<p class="o_view_nocontent_smiling_face"> ' +
+                    'Enter a beneficiary into your database </p> ' +
+                    '<p>Helps you easily track disbursement, issues, and activities related to a beneficiary.</p>'
+        }

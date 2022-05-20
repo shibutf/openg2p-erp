@@ -40,7 +40,7 @@
 
 
     <menuitem
-            action="openg2p.action_beneficiary_form"
+            action="openg2p.beneficiary_form_actions_server"
             id="menu_beneficiary_registration_tree"
             parent="menu_openg2p_registration_root"
             name="Beneficiary Directory"
