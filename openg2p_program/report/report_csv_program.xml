@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="program_enrol_export_selected_csv" model="ir.actions.report">
-        <field name="name">Export Selected To CSV</field>
+        <field name="name">Program Enrollment Export</field>
         <field name="model">openg2p.program.enrollment</field>
         <field name="report_type">csv</field>
         <field name="report_name">csv.program.enrollment</field>
-        <field name="binding_model_id" ref="openg2p_program.model_openg2p_program_enrollment"/>
+        <!-- <field name="binding_model_id" ref="openg2p_program.model_openg2p_program_enrollment"/> -->
         <field name="print_report_name">'openg2p.program.enrollment'</field>
         <field name="attachment_use">False</field>
     </record>
 
     <record id="ben_export_selected_csv" model="ir.actions.report">
-        <field name="name">Export Selected To CSV</field>
+        <field name="name">Beneficiary Export</field>
         <field name="model">openg2p.beneficiary</field>
         <field name="report_type">csv</field>
         <field name="report_name">csv.beneficiary</field>
-        <field name="binding_model_id" ref="openg2p.model_openg2p_beneficiary"/>
+        <!-- <field name="binding_model_id" ref="openg2p.model_openg2p_beneficiary"/> -->
         <field name="print_report_name">'openg2p.beneficiary'</field>
         <field name="attachment_use">False</field>
     </record>
 
-    <record id="export_csv_prog_enroll_all_server" model="ir.actions.server">
+    <!-- <record id="export_csv_prog_enroll_all_server" model="ir.actions.server">
         <field name="name">Export All To CSV</field>
         <field name="model_id" ref="openg2p_program.model_openg2p_program_enrollment"/>
         <field name="binding_model_id" ref="openg2p_program.model_openg2p_program_enrollment"/>
@@ -58,7 +58,7 @@
                 }
                 action = env.ref("openg2p_program.ben_export_selected_csv").report_action([], data=data)
         </field>
-    </record>
+    </record> -->
     <!-- <report 
         id="program_enrol_export_selection_csv"
         model="openg2p.program.enrollment"

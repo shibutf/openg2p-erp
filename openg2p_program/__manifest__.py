@@ -20,6 +20,7 @@
         "wizard/enroll_beneficiary_program_enrollment.xml",
         "wizard/disenroll_beneficiary.xml",
         "wizard/disenroll_beneficiary_program_enrollment.xml",
+        "wizard/export_wizard.xml",
     ],
     "demo": ["data/openg2p_program_demo.xml"],
     "installable": True,
