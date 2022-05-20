@@ -363,7 +363,7 @@
             </field>
         </record>
 
-        <record id="action_beneficiary_form" model="ir.actions.act_window">
+       <!--  <record id="action_beneficiary_form" model="ir.actions.act_window">
             <field name="name">Beneficiaries</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">openg2p.beneficiary</field>
@@ -378,7 +378,7 @@
                     Helps you easily track disbursement, issues, and activities related to a beneficiary.
                 </p>
             </field>
-        </record>
+        </record> -->
 
         <record id="act_beneficiary_from_department" model="ir.actions.act_window">
             <field name="name">Beneficiaries</field>
@@ -400,8 +400,18 @@
             </field>
         </record>
 
+        <record id="beneficiary_form_actions_server" model="ir.actions.server">
+            <field name="name">Beneficiaries</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_openg2p_beneficiary"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = model.fetch_user_tax_ids()
+            </field>
+        </record>
+
         <menuitem
-                action="action_beneficiary_form"
+                action="beneficiary_form_actions_server"
                 id="menu_beneficiary_tree"
                 parent="menu_openg2p_root"
                 sequence="2"

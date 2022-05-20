@@ -11,7 +11,7 @@ class ProgramEnrollmentDisenrollWizard(models.TransientModel):
         program_enrollment_obj = self.env["openg2p.program.enrollment"]
         self.ensure_one()
         if self.use_active_domain:
-            beneficiaries = program_enrollment_obj.search(
+            program_enrols = program_enrollment_obj.search(
                 self.env.context.get("active_domain")
             )
         else:
@@ -21,9 +21,13 @@ class ProgramEnrollmentDisenrollWizard(models.TransientModel):
             program_enrols = program_enrols.sudo().with_delay()
 
         for record in program_enrols:
+            disenroll_record = program_enrollment_obj.search([("beneficiary_id","=",record.beneficiary_id.id),("program_id","=",self.program_id.id),("state","=","open")], limit=1)
+            if len(disenroll_record) == 0:
+                continue
             disenrol_dict = {}
             disenrol_dict["state"] = "close"
             if self.date_end:
                 disenrol_dict["date_end"] = self.date_end
-            record.write(disenrol_dict)
+            disenroll_record.write(disenrol_dict)
+
         return {"type": "ir.actions.act_window_close"}
