@@ -6,7 +6,7 @@
     "website": "https://openg2p.org",
     "category": "OpenG2P",
     "version": "0.1",
-    "depends": ["openg2p"],
+    "depends": ["openg2p", "report_csv"],
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
@@ -15,6 +15,7 @@
         "views/openg2p_program.xml",
         "views/openg2p_program_enrollment.xml",
         "views/openg2p_beneficiary.xml",
+        "report/report_csv_program.xml",
         "wizard/enroll_beneficiary.xml",
         "wizard/enroll_beneficiary_program_enrollment.xml",
         "wizard/disenroll_beneficiary.xml",
