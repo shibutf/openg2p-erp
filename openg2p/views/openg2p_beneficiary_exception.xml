@@ -103,7 +103,5 @@
             id="menu_openg2p_beneficiary_exception_tree"
             parent="menu_openg2p_root"
             sequence="80"
-            groups="group_openg2p_officer,openg2p_program.group_openg2p_program_enrollment_manager"/>
-
-
+            groups="group_openg2p_officer"/>
 </odoo>

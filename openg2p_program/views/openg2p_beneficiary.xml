@@ -65,6 +65,17 @@
         </field>
     </record>
 
-
+    <menuitem
+        id="openg2p.menu_openg2p_root"
+        name="Beneficiaries"
+        groups="openg2p.group_openg2p_manager,openg2p.group_openg2p_officer,openg2p_program.group_openg2p_program_enrollment_manager"
+        web_icon="openg2p,static/description/icon.png"
+        sequence="10"/>
+    <menuitem
+        id="openg2p.menu_openg2p_configuration"
+        name="Configuration"
+        parent="openg2p.menu_openg2p_root"
+        groups="openg2p.group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager"
+        sequence="100"/>
 </odoo>
 
