@@ -348,6 +348,8 @@ class Beneficiary(models.Model):
 
     odk_batch_id = fields.Char(default=lambda *args: uuid.uuid4().hex)
 
+    belonging_company_ids = fields.Char(default=lambda self: str(self.env.user.company_id.id))
+
     def api_json(self):
         return {
             "id": self.id,
@@ -709,6 +711,21 @@ class Beneficiary(models.Model):
     @api.multi
     def write(self, vals):
         tools.image_resize_images(vals)
+        curr_company_id = str(self.env.user.company_id.id)
+        for i in range(len(self)):
+            belong_comps = self[i].belonging_company_ids
+            if isinstance(vals,list):
+                myvals = vals[i]
+            elif isinstance(vals,dict):
+                myvals = vals
+            
+            if "belonging_company_ids" not in myvals:
+                if curr_company_id not in belong_comps.split(","):
+                    belong_comps += "," + curr_company_id
+                    myvals["belonging_company_ids"] = belong_comps
+            elif str(myvals["belonging_company_ids"]) not in belong_comps.split(","):
+                belong_comps += "," + str(myvals["belonging_company_ids"])
+                myvals["belonging_company_ids"] = belong_comps
         res = super(Beneficiary, self).write(vals)
         for i in self:
             i._partner_update(vals)
@@ -1144,29 +1161,3 @@ class Beneficiary(models.Model):
             data["merged_beneficiary_ids"] = merge_ids
             merges.toggle_active()
             self.write(data)
-
-    @api.multi
-    def fetch_user_tax_ids(self):
-
-        enroll_ben_objs = self.env["openg2p.program.enrollment"].search([('create_uid','=', self.env.user.id)])
-        ben_ids = []
-        for enroll_ben_obj in enroll_ben_objs:
-            ben_ids.append(enroll_ben_obj.beneficiary_id.id)
-
-        # Added below beneficiary additions for beneficiaris without any program association
-        ben_objs = self.env["openg2p.beneficiary"].search([('create_uid','=', self.env.user.id)])
-        for ben in ben_objs:
-            ben_ids.append(ben.id)
-
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Beneficiaries",
-            "res_model": "openg2p.beneficiary",
-            "view_type": "form",
-            "view_mode": "tree,kanban,form,activity",
-            "domain": [('id','in',(ben_ids))],
-            "search_view_id": self.env.ref('view_openg2p_beneficiary_filter', ''),
-            "help": '<p class="o_view_nocontent_smiling_face"> ' +
-                    'Enter a beneficiary into your database </p> ' +
-                    '<p>Helps you easily track disbursement, issues, and activities related to a beneficiary.</p>'
-        }

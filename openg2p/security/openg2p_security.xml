@@ -52,10 +52,11 @@
             <field name="name">Beneficiary multi company rule</field>
             <field name="model_id" ref="model_openg2p_beneficiary"/>
             <field name="global" eval="True"/>
+            <!-- <field name="domain_force">['|', ('company_id', '=', False),
+                                        ('company_id', 'child_of', [user.company_id.id])]</field> -->
             <field name="domain_force">['|', ('company_id', '=', False),
-                                        ('company_id', 'child_of', [user.company_id.id])]</field>
+                                        ('belonging_company_ids','like',str(user.company_id.id))]</field>
         </record>
-
 
         <record id="openg2p_beneficiary_location_rule" model="ir.rule">
             <field name="name">Beneficiary multi location rule</field>
@@ -64,6 +65,13 @@
             <field name="domain_force">[('location_id', 'child_of', [user.location_id.id])]</field>
         </record>
 
+        <record id="openg2p_beneficiary_id_number_comp_rule" model="ir.rule">
+            <field name="name">Beneficiary Id Number multi company rule</field>
+            <field name="model_id" ref="model_openg2p_beneficiary_id_number"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('beneficiary_id.company_id', '=', False),
+                                        ('beneficiary_id.belonging_company_ids','like','')]</field>
+        </record>
 
     </data>
 </odoo>

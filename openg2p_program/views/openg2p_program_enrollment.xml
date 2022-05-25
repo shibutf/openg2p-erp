@@ -58,7 +58,7 @@
                 <header>
                     <button type="object" name="action_activate" string="Confirm"
                             class="oe_highlight"
-                            attrs="{'invisible': [('state','!=','draft')]}" group="openg2p_program.group_openg2p_program_enrollment_manager"/>
+                            attrs="{'invisible': [('state','!=','draft')]}" group="openg2p.group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,open"/>
                 </header>
                 <sheet>
@@ -71,7 +71,7 @@
                         </button>
                         <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive"
                                 attrs="{'invisible':[('state','in',('close', 'cancel'))]}"
-                                group="openg2p_program.group_openg2p_program_enrollment_manager">
+                                group="openg2p.group_openg2p_manager,openg2p_program.group_openg2p_program_enrollment_manager">
                             <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
                         </button>
                     </div>
@@ -184,7 +184,7 @@
         </field>
     </record>
 
-    <!-- <record id="action_openg2p_program_enrollment" model="ir.actions.act_window">
+    <record id="action_openg2p_program_enrollment" model="ir.actions.act_window">
         <field name="name">Program Enrollments</field>
         <field name="res_model">openg2p.program.enrollment</field>
         <field name="view_type">form</field>
@@ -196,16 +196,6 @@
                 Create a new program enrollment
             </p>
         </field>
-    </record> -->
-
-    <record id="openg2p_program_enrollment_actions_server" model="ir.actions.server">
-        <field name="name">Program Enrollments</field>
-        <field name="type">ir.actions.server</field>
-        <field name="model_id" ref="model_openg2p_program_enrollment"/>
-        <field name="state">code</field>
-        <field name="code">
-            action = model.fetch_user_tax_ids()
-        </field>
     </record>
 
     <menuitem
@@ -213,6 +203,6 @@
         name="Program Enrollments"
         groups="openg2p.group_openg2p_manager,openg2p.group_openg2p_officer,openg2p_program.group_openg2p_program_enrollment_manager"
         parent="openg2p.menu_openg2p_root"
-        action="openg2p_program_enrollment_actions_server" sequence="13"/>
+        action="action_openg2p_program_enrollment" sequence="13"/>
     
 </odoo>

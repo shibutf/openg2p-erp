@@ -91,11 +91,10 @@
         </field>
     </record>
 
-    <record id="open_view_program_all_config" model="ir.actions.act_window">
+    <!-- <record id="open_view_program_all_config" model="ir.actions.act_window">
         <field name="name">Programs</field>
         <field name="res_model">openg2p.program</field>
         <field name="view_type">form</field>
-        <field name="domain">[('create_uid','=',uid)]</field>
         <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="view_openg2p_program_filter"/>
         <field name="context">{}</field>
@@ -107,9 +106,18 @@
                 Manage payments to beneficiaries and redressal mechanism
             </p>
         </field>
+    </record> -->
+
+    <record id="open_view_program_all_config_server_action" model="ir.actions.server">
+        <field name="name">Programs</field>
+        <field name="model_id" ref="model_openg2p_program"/>
+        <field name="state">code</field>
+        <field name="code">
+                action = model.get_program_server_action()
+        </field>
     </record>
 
-    <menuitem action="open_view_program_all_config" id="menu_programs_config" name="Programs"
+    <menuitem action="open_view_program_all_config_server_action" id="menu_programs_config" name="Programs"
               parent="openg2p.menu_openg2p_configuration" sequence="1"/>
 
 </odoo>

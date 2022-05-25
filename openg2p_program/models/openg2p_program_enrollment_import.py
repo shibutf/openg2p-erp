@@ -52,6 +52,8 @@ class ProgramEnrollmentImport(models.Model):
                         'record': False,
                     }]
                 }
+
+        curr_company_id = self.env.user.company_id.id
         
         ben_error_count = 0
         ben_merge_count = 0
@@ -85,7 +87,12 @@ class ProgramEnrollmentImport(models.Model):
             # checking if beneficiary exists and creating if required
             if beneficiary_base_id_type:
                 ben_id_from_data = row_data[ben_base_id_cat.name]
-                existing_bens = self.env["openg2p.beneficiary.id_number"].search([("name", "=", ben_id_from_data),("category_id","=", ben_base_id_cat.id)])
+                existing_bens = self.env["openg2p.beneficiary.id_number"].sudo().search(
+                    [
+                        ("name", "=", ben_id_from_data),
+                        ("category_id","=", ben_base_id_cat.id),
+                    ]
+                )
                 if len(existing_bens) == 0 and should_create_beneficiary != "true":
                     error_messages.append({
                         'type': 'error',
@@ -96,7 +103,7 @@ class ProgramEnrollmentImport(models.Model):
                     continue
                 elif len(existing_bens) == 0 and should_create_beneficiary == "true":
                     try:
-                        existing_bens = self.create_ben_with_data(ben_id_from_data, ben_base_id_cat, row_data)
+                        existing_bens = self.create_ben_with_data(ben_id_from_data, ben_base_id_cat, row_data, curr_company_id)
                         ben_create_count += 1
                     except Exception as e:
                         error_messages.append({
@@ -107,7 +114,8 @@ class ProgramEnrollmentImport(models.Model):
                         ben_error_count += 1
                 elif len(existing_bens) == 1 and should_create_beneficiary == "true":
                     try:
-                        # self.merge_ben_with_data(existing_bens, row_data)
+                        self.merge_ben_belonging_company(existing_bens, curr_company_id)
+                        # self.merge_ben_with_data(existing_bens, row_data, curr_company_id)
                         ben_merge_count += 1
                     except Exception as e:
                         error_messages.append({
@@ -126,7 +134,7 @@ class ProgramEnrollmentImport(models.Model):
             if not program_name:
                 continue
             
-            program_id = self.env["openg2p.program"].search([("name", "=", program_name),('create_uid','=', self.env.user.id)], limit=1)
+            program_id = self.env["openg2p.program"].search([("name", "=", program_name),('company_id','=', self.env.user.company_id.id)], limit=1)
             if len(program_id) == 0:
                 continue
 
@@ -182,8 +190,10 @@ class ProgramEnrollmentImport(models.Model):
             'messages': error_messages
         }
 
-    def create_ben_with_data(self, ben_base_id, ben_base_id_cat, row_data):
+    def create_ben_with_data(self, ben_base_id, ben_base_id_cat, row_data, curr_company_id):
         data = self.prepare_data_ben(ben_base_id, row_data)
+        data["company_id"] = curr_company_id
+        data["belonging_company_ids"] = str(curr_company_id)
         ben = self.env["openg2p.beneficiary"].create(data)
         if beneficiary_base_id_type:
             return self.env["openg2p.beneficiary.id_number"].create(
@@ -195,9 +205,17 @@ class ProgramEnrollmentImport(models.Model):
             )
         return None
     
-    def merge_ben_with_data(self, existing_ben_base_id, row_data):
+    def merge_ben_with_data(self, existing_ben_base_id, row_data, curr_company_id):
         data = self.prepare_data_ben(existing_ben_base_id.name, row_data)
         existing_ben_base_id.beneficiary_id.write(data)
+        return existing_ben_base_id
+
+    def merge_ben_belonging_company(self, existing_ben_base_id, curr_company_id):
+        existing_ben_base_id.beneficiary_id.write(
+            {
+                "belonging_company_ids": str(curr_company_id)
+            }
+        )
         return existing_ben_base_id
     
     def prepare_data_ben(self, ben_base_id, row_data):

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_read_helpdesk_tickets_program_enroll_off,helpdesk.ticket.program.enroll.off,helpdesk_mgmt.model_helpdesk_ticket,openg2p_program.group_openg2p_program_enrollment_manager,1,0,0,0

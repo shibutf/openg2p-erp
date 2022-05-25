@@ -166,24 +166,3 @@ class ProgramEnrollment(models.Model):
                     "This beneficiary is already enrolled to this program!"
                     % i.beneficiary_id.name
                 )
-
-    @api.multi
-    def fetch_user_tax_ids(self):
-
-        enroll_ben_objs = self.env["openg2p.program.enrollment"].search([('create_uid','=', self.env.user.id)])
-        ben_ids = []
-        for enroll_ben_obj in enroll_ben_objs:
-            ben_ids.append(enroll_ben_obj.beneficiary_id.id)
-
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Program Enrollments",
-            "res_model": "openg2p.program.enrollment",
-            "view_type": "form",
-            "view_mode": "tree,form,activity,kanban",
-            "domain": [('beneficiary_id','in', (ben_ids))],
-            "context": {'search_default_current':1, 'search_default_state_is_active': 1},
-            "search_view_id": self.env.ref('openg2p_program_enrollment_view_search', ''),
-            "help": '<p class="o_view_nocontent_smiling_face"> ' +
-                    'Create a new program enrollment </p>'
-        }

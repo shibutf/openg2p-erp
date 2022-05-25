@@ -115,3 +115,17 @@ class Program(models.Model):
             "category_ids": self.category_ids.ids,
             "category_count": self.category_count,
         }
+    
+    @api.multi
+    def get_program_server_action(self):
+        return {
+            "name": "Programs",
+            "type": "ir.actions.act_window",
+            "res_model": "openg2p.program",
+            "view_type": "form",
+            "view_mode": "tree,form",
+            "search_view_id": self.env.ref("openg2p_program.view_openg2p_program_filter").id,
+            "domain" : [('company_id','child_of',[self.env.user.company_id.id])],
+            "context": {},
+            "help": '<p class="o_view_nocontent_empty_folder">Create a new program</p>\n<p>Manage payments to beneficiaries and redressal mechanism</p>',
+        }
