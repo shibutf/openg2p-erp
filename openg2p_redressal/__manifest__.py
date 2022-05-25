@@ -12,6 +12,7 @@
     # always loaded
     "data": [
         "security/openg2p_redressal_security.xml",
+        "security/ir.model.access.csv",
         "views/helpdesk_ticket.xml",
         "views/helpdesk_ticket_category.xml",
         "views/helpdesk_ticket_stage.xml",
