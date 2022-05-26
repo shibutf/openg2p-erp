@@ -134,7 +134,7 @@ class ProgramEnrollmentImport(models.Model):
             if not program_name:
                 continue
             
-            program_id = self.env["openg2p.program"].search([("name", "=", program_name),('company_id','=', self.env.user.company_id.id)], limit=1)
+            program_id = self.env["openg2p.program"].search([("name", "=", program_name),('company_id','=', self.env.user.company_id.id),("state","=","active")], limit=1)
             if len(program_id) == 0:
                 continue
 

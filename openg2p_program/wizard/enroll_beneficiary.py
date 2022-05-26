@@ -14,7 +14,7 @@ class EnrollWizard(models.TransientModel):
         "openg2p.program",
         string="Program",
         required=True,
-        domain=lambda self: [('company_id','child_of',[self.env.user.company_id.id])]
+        domain=lambda self: [("state","=","active"),('company_id','child_of',[self.env.user.company_id.id])]
     )
     # category_id = fields.Many2one(
     #     "openg2p.program.enrollment_category",
