@@ -85,11 +85,11 @@ class ProgramEnrollment(models.Model):
     @api.multi
     def toggle_active(self):
         for rec in self:
-            if not rec.active and not rec.date_end:
+            # if rec.active and not rec.date_end:
                 rec.date_end = fields.Date.today()
                 if rec.state not in ("close", "cancel"):
                     rec.state = "close"
-        super(ProgramEnrollment, self).toggle_active()
+        # super(ProgramEnrollment, self).toggle_active()
 
     @api.model
     def create(self, vals):

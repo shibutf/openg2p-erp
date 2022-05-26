@@ -17,16 +17,16 @@ class ProgramEnrollmentEnrollWizard(models.TransientModel):
         else:
             pre_existing_program_enrols = program_enrol_obj.browse(self.env.context.get("active_ids"))
 
-        if len(pre_existing_program_enrols) > 1000:
-            pre_existing_program_enrols = pre_existing_program_enrols.sudo().with_delay()
+        # if len(pre_existing_program_enrols) > 1000:
+        #     pre_existing_program_enrols = pre_existing_program_enrols.sudo().with_delay()
         
         for record in pre_existing_program_enrols:
             enrol_exists = self.env["openg2p.program.enrollment"].search(
                 [
-                    ("beneficiary_id","=",record.beneficiary_id.id),
-                    ("program_id","=",self.program_id.id),
-                    ("state","=","open"),
-                ], limit=1)
+                    ("beneficiary_id", "=", record.beneficiary_id.id),
+                    ("program_id", "=", self.program_id.id),
+                    ("state", "in", ("open", "draft")),
+                ])
             if len(enrol_exists) == 0:
                 record.beneficiary_id.program_enroll(
                     program_id=self.program_id.id,
@@ -37,13 +37,14 @@ class ProgramEnrollmentEnrollWizard(models.TransientModel):
                     total_amount=self.total_amount,
                     confirm=self.auto_confirm,
                 )
-            elif len(enrol_exists) == 1:
-                enrol_exists.write(
-                    {
-                        "date_start": self.date_start,
-                        "date_end": self.date_end if self.date_end else self.program_id.date_end,
-                        "program_amount": self.program_amount,
-                        "total_amount": self.total_amount,
-                    }
-                )
+            else:
+                overwrite_dict = {
+                    "date_start": self.date_start,
+                    "date_end": self.date_end if self.date_end else self.program_id.date_end,
+                    "program_amount": self.program_amount,
+                    "total_amount": self.total_amount,
+                }
+                if self.auto_confirm:
+                    overwrite_dict["state"] = "open"
+                enrol_exists.write(overwrite_dict)
         return {"type": "ir.actions.act_window_close"}

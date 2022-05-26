@@ -17,17 +17,16 @@ class ProgramEnrollmentDisenrollWizard(models.TransientModel):
         else:
             program_enrols = program_enrollment_obj.browse(self.env.context.get("active_ids"))
 
-        if len(program_enrols) > 1000:
-            program_enrols = program_enrols.sudo().with_delay()
+        # if len(program_enrols) > 1000:
+        #     program_enrols = program_enrols.sudo().with_delay()
 
         for record in program_enrols:
-            disenroll_record = program_enrollment_obj.search([("beneficiary_id","=",record.beneficiary_id.id),("program_id","=",self.program_id.id),("state","=","open")], limit=1)
-            if len(disenroll_record) == 0:
-                continue
-            disenrol_dict = {}
-            disenrol_dict["state"] = "close"
-            if self.date_end:
-                disenrol_dict["date_end"] = self.date_end
-            disenroll_record.write(disenrol_dict)
+            program_enrollment_obj.search(
+                [
+                    ("beneficiary_id", "=", record.beneficiary_id.id),
+                    ("program_id", "=", self.program_id.id),
+                    ("state", "in", ("open", "draft")),
+                ]
+            ).toggle_active()
 
         return {"type": "ir.actions.act_window_close"}
