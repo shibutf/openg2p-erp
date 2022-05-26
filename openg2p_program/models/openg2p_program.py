@@ -2,6 +2,7 @@
 from random import randint
 
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 class Program(models.Model):
@@ -72,7 +73,7 @@ class Program(models.Model):
         string="Currency",
         readonly=True,
     )
-    color = fields.Integer(string="Color Index", default=lambda self: randint(1, 6))
+    color = fields.Integer(string="Color Index", compute="_compute_program_color", store=True)
     category_ids = fields.One2many("openg2p.program.enrollment_category", "program_id")
     category_count = fields.Integer(compute="_compute_category_count", store=True)
 
@@ -129,3 +130,22 @@ class Program(models.Model):
             "context": {},
             "help": '<p class="o_view_nocontent_empty_folder">Create a new program</p>\n<p>Manage payments to beneficiaries and redressal mechanism</p>',
         }
+
+    @api.one
+    @api.constrains('name')
+    def _check_len_html(self):
+        if len(self.name)>64:
+            raise ValidationError("Name is longer than 64 Characters")
+
+    @api.one
+    @api.constrains('code')
+    def _check_len_html(self):
+        if len(self.code)>64:
+            raise ValidationError("Code is longer than 64 Characters")
+
+    @api.depends('code')
+    def _compute_program_color(self):
+        color_seq = self.sudo().search_count([]) - 1
+        for record in self:
+            color_seq = color_seq + 1
+            record.color = color_seq
