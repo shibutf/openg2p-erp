@@ -138,7 +138,7 @@ class ProgramEnrollmentImport(models.Model):
             if len(program_id) == 0:
                 continue
 
-            existing_enrols = self.search([("program_id", "=", program_id.id),("beneficiary_id", "=", existing_bens.beneficiary_id.id)])
+            existing_enrols = self.search([("program_id", "=", program_id.id),("beneficiary_id", "=", existing_bens.beneficiary_id.id), ("state", "in", ("open", "draft"))])
             if len(existing_enrols) == 0:
                 try:
                     enrol = self.create({

@@ -96,7 +96,7 @@ class Program(models.Model):
     @api.multi
     def action_done(self):
         self.env["openg2p.program.enrollment"].search(
-            ("program_id", "in", self.ids), ("state", "in", ("open", "draft"))
+            [("program_id", "in", self.ids), ("state", "in", ("open", "draft"))]
         ).toggle_active()
         self.write({"state": "done"})
 

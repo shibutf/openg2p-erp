@@ -38,16 +38,15 @@ class DisenrollWizard(models.TransientModel):
         else:
             beneficiaries = beneficiary_obj.browse(self.env.context.get("active_ids"))
 
-        if len(beneficiaries) > 1000:
-            beneficiaries = beneficiaries.sudo().with_delay()
+        # if len(beneficiaries) > 1000:
+        #     beneficiaries = beneficiaries.sudo().with_delay()
 
         for record in beneficiaries:
-            existing_enrols = self.env["openg2p.program.enrollment"].search([("beneficiary_id","=",record.id),("program_id","=",self.program_id.id)])
-            # the following size is one anyway
-            for enrol in existing_enrols:
-                disenrol_dict = {}
-                disenrol_dict["state"] = "close"
-                if self.date_end:
-                    disenrol_dict["date_end"] = self.date_end
-                enrol.write(disenrol_dict)
+            self.env["openg2p.program.enrollment"].search(
+                [
+                    ("beneficiary_id", "=", record.id),
+                    ("program_id", "=", self.program_id.id),
+                    ("state", "in", ("open", "draft")),
+                ]
+            ).toggle_active()
         return {"type": "ir.actions.act_window_close"}
