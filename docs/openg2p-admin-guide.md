@@ -1,4 +1,4 @@
-# Administrator's Guide for MOSIP's OpenG2P
+# Administrators Guide for MOSIP's OpenG2P
 
 This guide helps the administrators in configuring and using the OpenG2P portal. 
 
