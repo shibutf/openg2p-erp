@@ -1,8 +1,10 @@
-# Administrator's Guide for Usage of MOSIP's OpenG2P
+# Administrator's Guide for MOSIP's OpenG2P
 
-This guide describes the administrator' functions. After installing the OpenG2P framework, Administrator user is auto created. 
+This guide helps the administrators in configuring and using the OpenG2P portal. 
 
 To know more about installation instructions, refer [kubernetes install instructions](https://github.com/mosip/openg2p-erp-docker/tree/develop#installation-on-kubernetes-cluster) and [standalone install instructions](./openg2p-setup-and-install.md).
+
+After installing the OpenG2P framework, Administrator user is auto created.
 
 ## Glossary
 
