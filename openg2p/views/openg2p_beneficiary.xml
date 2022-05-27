@@ -381,7 +381,7 @@
         </record>
 
         <record id="act_beneficiary_from_department" model="ir.actions.act_window">
-            <field name="name">Beneficiaries</field>
+            <field name="name">Beneficiaries - Location</field>
             <field name="res_model">openg2p.beneficiary</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,activity</field>

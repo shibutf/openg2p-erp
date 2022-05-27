@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="program_enrol_export_selected_xlsx" model="ir.actions.report">
+        <field name="name">Program Enrollment Export</field>
+        <field name="model">openg2p.program.enrollment</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">xlsx.program.enrollment</field>
+        <field name="report_file">Program Enrollment Export</field>
+        <field name="attachment_use">False</field>
+    </record>
+
+    <record id="ben_export_selected_xlsx" model="ir.actions.report">
+        <field name="name">Beneficiary Export</field>
+        <field name="model">openg2p.beneficiary</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">xlsx.beneficiary</field>
+        <field name="report_file">Beneficiary Export</field>
+        <field name="attachment_use">False</field>
+    </record>
+    
+    <!-- <report 
+        id="program_enrol_export_selection_csv"
+        model="openg2p.program.enrollment"
+        name="csv.program.enrollment"
+        string="Export Selected To CSV"
+        report_type="csv"
+        file="openg2p.program.enrollment"
+        attachment_use="False"
+        groups="openg2p_program.group_openg2p_program_enrollment_manager"
+    /> -->
+</odoo>

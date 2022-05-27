@@ -5,6 +5,7 @@
             <field name="name">Program Enrollment Officer</field>
             <field name="category_id" ref="openg2p.module_category_openg2p"/>
             <!-- <field name="implied_ids" eval="[(4, ref('openg2p.group_openg2p_officer'))]"/> -->
+            <field name="implied_ids" eval="[(4, ref('web_export_view.group_disallow_export_view_data_excel'))]"/>
         </record>
 
         <record id="openg2p.group_openg2p_manager" model="res.groups">

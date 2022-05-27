@@ -42,6 +42,7 @@
         "sms_frame",
         "remove_odoo_enterprise",
         "disable_odoo_online",
+        "report_csv",
         "report_xlsx",
         "report_xlsx_helper",
         "display_import_button",

@@ -6,7 +6,7 @@ from odoo import models
 _logger = logging.getLogger(__name__)
 
 
-class BeneficiaryCSVReport(models.AbstractModel):
+class ProgramEnrollCSVReport(models.AbstractModel):
     _name = 'report.csv.program.enrollment'
     _inherit = ['report.report_csv.abstract']
     _description = 'Program Enrollment csv report model'
@@ -45,8 +45,8 @@ class BeneficiaryCSVReport(models.AbstractModel):
             writer.writerow({
                 prog_enroll_fields["related_ben_base_id"].string: obj.related_ben_base_id,
                 prog_enroll_fields["program_id"].string: obj.program_id.name,
-                prog_enroll_fields["date_start"].string: obj.date_start,
-                prog_enroll_fields["date_end"].string: obj.date_end,
+                prog_enroll_fields["date_start"].string: obj.date_start if obj.date_start else "",
+                prog_enroll_fields["date_end"].string: obj.date_end if obj.date_end else "",
                 prog_enroll_fields["program_amount"].string: obj.program_amount,
                 prog_enroll_fields["total_amount"].string: obj.total_amount,
                 prog_enroll_fields["state"].string: state_sel_dict[obj.state],
