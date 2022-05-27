@@ -2,6 +2,8 @@
 
 This guide describes the administrator' functions. After installing the OpenG2P framework, Administrator user is auto created. 
 
+To know more about installation instructions, refer [kubernetes install instructions](https://github.com/mosip/openg2p-erp-docker/tree/develop#installation-on-kubernetes-cluster) and [standalone install instructions](./openg2p-setup-and-install.md).
+
 ## Glossary
 
 This section describes the terminology used in OpenG2P.
@@ -20,50 +22,46 @@ This section describes the terminology used in OpenG2P.
 
 ##  Identification creation
 
-This section describes how to configure/create identifications for beneficiaries.
-
-#### Prerequisite 
-
-This identification should also be configured before installation using the following environment variables. To know more, refer [install instructions](https://github.com/mosip/openg2p-erp-docker/tree/develop#installation-on-kubernetes-cluster). 
+The identification should also be configured before installation using the following environment variables.
   - `PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID_LABEL`: `Tax ID`
   - `PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID`: `taxid`
+ 
+This section describes how to configure/create identifications for beneficiaries.
 
-* Login as `admin`.
-* Navigate to *Beneficiaries* app -> Configuration menu -> Identification
+* Navigate to *Beneficiaries* app -> Configuration menu -> Identification.
 * Create a new Identification with the following properties.
   - ID Name: `Tax ID`
   - Code: `taxid`
 
 ![Create Identification](./images/identification.png)
 
-### 3.2. Organization creation
+## Organization creation
 
 Follow these instructions to create a new company/organization in OpenG2P.
 
-- Login as `admin`.
-- Navigate to *Settings* app.
-- Click on *Users & Companies*, then on *Companies*.
-- Create a new company here, with the required details.
+* Navigate to *Settings* app -> *Users & Companies* -> *Companies*.
+* Create a new company with the required details.
 
 ![Create Company](./images/company.png)
 
-- Since `admin` created the companies, `admin` is part of all of the companies/organizations by default.
-- After creating companies, logout as `admin`, then login back as `admin` for the created companies to get reflected.
-- The list of available companies/organizations for the currently logged in user (i.e., `admin`) will be reflected in the dropdown in the top right corner.
-- For each company in the dropdown on the top right, navigate to *Settings* app, and then to *General Settings* Menu, and change the *Background Image* as required.
+* Since `admin` has created the companies, by default admin is a part of all of the companies/organizations.
+* On the top right corner, the list of available companies/organizations for the currently logged in user (i.e., `admin`) will be reflected in the dropdown
+* To be able to switch between companies, the admin needs to logout and login again.
+* For each company in the dropdown, navigate to *Settings* app -> *General Settings* menu and change the *Background Image* as required.
 
-### 3.3. User creation
+## User creation
 
 Following section describes how to create *users* (Program Enrollment Officers) within each company.
 
-- Login as `admin`. Select the company/organization in which the user is to be created. (On the company dropdown on the top right corner).
-- Create a new user with the required email and name.
-- Assign only the `Program Enrollment Officer` role to the user, and remove all the other roles. The following image show how the final roles should look like.
+* Select the company/organization for which the user has to be created (from the company dropdown on the top right corner).
+* Create a new user with the required email and name.
+* Select blank against *Helpdesk* under Application Accesses section.
+* Under OpenG2P section, assign only the `Program Enrollment Officer` role to the user and remove all the other roles. 
+* Under Others section, uncheck *Access to Private Addresses*
+* Click *Save* to create the user.
+* Upon creating user(s), select the user(s), click on *Action* -> *Change Password*.
+* Assign some temporary password to each user, and instruct the users to change their password immediately upon logging in.
+
+The image below reflects the settings required for creating a user.
 
 ![User Roles](./images/user-roles.png)
-
-- Click *Save* to create the user.
-- Upon creating user(s), select the user(s), click on *Action*. Then click *Change Password*.
-- Assign some temporary password to each user, and instruct the required users to change their password immediately upon logging in.
-
-
