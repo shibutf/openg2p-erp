@@ -119,7 +119,7 @@ class ProgramEnrollment(models.Model):
                     )
                 )
 
-            if c.date_end and c.date_end > c.program_id.date_end:
+            if c.date_end and c.program_id.date_end and c.date_end > c.program_id.date_end:
                 raise ValidationError(
                     _(
                         "Program Enrollment end date must be later than program end date."
