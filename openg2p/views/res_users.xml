@@ -8,7 +8,12 @@
             <field name="inherit_id" ref="base.view_users_form"/>
             <field name="arch" type="xml">
                 <page name="access_rights" position="inside">
-                    <field name="location_id"/>
+                    <group string="Location Customization">
+                        <field name="location_id"/>
+                    </group>
+                    <group string="Login Customization">
+                        <field name="action_id"/>
+                    </group>
                 </page>
             </field>
         </record>
