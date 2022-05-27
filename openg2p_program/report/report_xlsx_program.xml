@@ -17,15 +17,4 @@
         <field name="report_file">Beneficiary Export</field>
         <field name="attachment_use">False</field>
     </record>
-    
-    <!-- <report 
-        id="program_enrol_export_selection_csv"
-        model="openg2p.program.enrollment"
-        name="csv.program.enrollment"
-        string="Export Selected To CSV"
-        report_type="csv"
-        file="openg2p.program.enrollment"
-        attachment_use="False"
-        groups="openg2p_program.group_openg2p_program_enrollment_manager"
-    /> -->
 </odoo>

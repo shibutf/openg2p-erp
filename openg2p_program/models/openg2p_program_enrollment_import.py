@@ -66,6 +66,8 @@ class ProgramEnrollmentImport(models.Model):
         success_ids = []
         for row in all_data[1:]:
             total_count += 1
+            if total_count%100 == 0:
+                _logger.info("Program Enrollment Import: Total Records Updated: %d. Enrollments Created: %d. Enrollments Merged: %d. Error Enrollments: %d. Beneficaries Created: %d. Beneficaries Merged: %d. Error Beneficaries: %d." % (total_count, enrol_create_count, enrol_merge_count, enrol_error_count, ben_create_count, ben_merge_count, ben_error_count))
             row_data = dict(zip(columns, row))
 
             program_id_label = self._fields["program_id"].string

@@ -63,7 +63,7 @@ class Beneficiary(models.Model):
 
     partner_id = fields.Many2one(
         "res.partner",
-        required=True,
+        required=False,
         ondelete="restrict",
         string="Related Partner",
         help="Partner-related data of the beneficiary",
@@ -704,7 +704,7 @@ class Beneficiary(models.Model):
         tools.image_resize_images(vals)
         if not vals.get("phone") and vals.get("mobile"):
             vals["phone"] = vals.get("mobile")
-        self._partner_create(vals)
+        # self._partner_create(vals)
         res = super(Beneficiary, self).create(vals)
         return res
 
@@ -725,8 +725,8 @@ class Beneficiary(models.Model):
             else:
                 myvals.pop("belonging_company_ids")
         res = super(Beneficiary, self).write(vals)
-        for i in self:
-            i._partner_update(vals)
+        # for i in self:
+        #     i._partner_update(vals)
         return res
 
     @api.onchange("country_id")
