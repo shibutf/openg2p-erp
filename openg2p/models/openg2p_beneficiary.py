@@ -348,7 +348,7 @@ class Beneficiary(models.Model):
 
     odk_batch_id = fields.Char(default=lambda *args: uuid.uuid4().hex)
 
-    belonging_company_ids = fields.Char(default=lambda self: str(self.env.user.company_id.id))
+    belonging_company_ids = fields.Char(default=lambda self: ","+str(self.env.user.company_id.id)+",")
 
     def api_json(self):
         return {
@@ -719,13 +719,11 @@ class Beneficiary(models.Model):
             elif isinstance(vals,dict):
                 myvals = vals
             
-            if "belonging_company_ids" not in myvals:
-                if curr_company_id not in belong_comps.split(","):
-                    belong_comps += "," + curr_company_id
-                    myvals["belonging_company_ids"] = belong_comps
-            elif str(myvals["belonging_company_ids"]) not in belong_comps.split(","):
-                belong_comps += "," + str(myvals["belonging_company_ids"])
+            if str(myvals["belonging_company_ids"]) not in belong_comps.split(","):
+                belong_comps += str(myvals["belonging_company_ids"]) + ","
                 myvals["belonging_company_ids"] = belong_comps
+            else:
+                myvals.pop("belonging_company_ids")
         res = super(Beneficiary, self).write(vals)
         for i in self:
             i._partner_update(vals)

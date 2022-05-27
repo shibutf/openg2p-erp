@@ -193,7 +193,7 @@ class ProgramEnrollmentImport(models.Model):
     def create_ben_with_data(self, ben_base_id, ben_base_id_cat, row_data, curr_company_id):
         data = self.prepare_data_ben(ben_base_id, row_data)
         data["company_id"] = curr_company_id
-        data["belonging_company_ids"] = str(curr_company_id)
+        data["belonging_company_ids"] = "," + str(curr_company_id) + ","
         ben = self.env["openg2p.beneficiary"].create(data)
         if beneficiary_base_id_type:
             return self.env["openg2p.beneficiary.id_number"].create(
