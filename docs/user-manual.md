@@ -42,7 +42,7 @@ Upon installing of the OpenG2P framework, Administrator (`admin`) user is auto c
 - Create a new Identification called with the following properties.
   - ID Name: `Tax ID`
   - Code: `taxid`
-- Note: This identification should also be configured before installation using the following environment variables. Refer [install instructions](https://github.com/mosip/openg2p-erp-docker/tree/develop#installation-on-kubernetes-cluster). 
+- Note: This identification should also be configured before installation using the following environment variables. Refer [kubernetes install instructions](https://github.com/mosip/openg2p-erp-docker/tree/develop#installation-on-kubernetes-cluster) and [standalone install instructions](./openg2p-setup-and-install.md). 
   - `PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID_LABEL`: `Tax ID`
   - `PROGRAM_ENROLLMENT_ON_IMPORT_BENEFICIARY_BASE_ID`: `taxid`
 

@@ -73,7 +73,7 @@ class Program(models.Model):
         string="Currency",
         readonly=True,
     )
-    color = fields.Integer(string="Color Index", compute="_compute_program_color", store=True)
+    color = fields.Integer(string="Color Index", default=lambda self: self.sudo().search_count([])+1)
     category_ids = fields.One2many("openg2p.program.enrollment_category", "program_id")
     category_count = fields.Integer(compute="_compute_category_count", store=True)
 
@@ -143,9 +143,3 @@ class Program(models.Model):
         if len(self.code)>64:
             raise ValidationError("Code is longer than 64 Characters")
 
-    @api.depends('code')
-    def _compute_program_color(self):
-        color_seq = self.sudo().search_count([]) - 1
-        for record in self:
-            color_seq = color_seq + 1
-            record.color = color_seq
