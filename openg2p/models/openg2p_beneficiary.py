@@ -28,8 +28,6 @@ def _lang_get(self):
 
 
 _PARTNER_FIELDS = [
-    "firstname",
-    "lastname",
     "street",
     "street2",
     "zip",
@@ -65,7 +63,7 @@ class Beneficiary(models.Model):
 
     partner_id = fields.Many2one(
         "res.partner",
-        required=True,
+        required=False,
         ondelete="restrict",
         string="Related Partner",
         help="Partner-related data of the beneficiary",
@@ -349,6 +347,8 @@ class Beneficiary(models.Model):
     )
 
     odk_batch_id = fields.Char(default=lambda *args: uuid.uuid4().hex)
+
+    belonging_company_ids = fields.Char(default=lambda self: ","+str(self.env.user.company_id.id)+",")
 
     def api_json(self):
         return {
@@ -704,16 +704,29 @@ class Beneficiary(models.Model):
         tools.image_resize_images(vals)
         if not vals.get("phone") and vals.get("mobile"):
             vals["phone"] = vals.get("mobile")
-        self._partner_create(vals)
+        # self._partner_create(vals)
         res = super(Beneficiary, self).create(vals)
         return res
 
     @api.multi
     def write(self, vals):
         tools.image_resize_images(vals)
+        curr_company_id = str(self.env.user.company_id.id)
+        for i in range(len(self)):
+            belong_comps = self[i].belonging_company_ids
+            if isinstance(vals,list):
+                myvals = vals[i]
+            elif isinstance(vals,dict):
+                myvals = vals
+            
+            if str(myvals["belonging_company_ids"]) not in belong_comps.split(","):
+                belong_comps += str(myvals["belonging_company_ids"]) + ","
+                myvals["belonging_company_ids"] = belong_comps
+            else:
+                myvals.pop("belonging_company_ids")
         res = super(Beneficiary, self).write(vals)
-        for i in self:
-            i._partner_update(vals)
+        # for i in self:
+        #     i._partner_update(vals)
         return res
 
     @api.onchange("country_id")

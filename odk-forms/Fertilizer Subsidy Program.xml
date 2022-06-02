@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<h:head>
+		<h:title>Fertilizer Subsidy Program</h:title>
+		<model odk:xforms-version="1.0.0">
+			<instance>
+				<data id="fsp_program" version="1.0">
+				
+				<!--
+				{ "DateIssued": "21 September 2021", "Issuer": "PSA", "subject": { "Suffix": "", "lName": "banto", "fName": "aaron-o-niel", "mName": "simbaco", "sex": "Male", "BF": "[1,7]", "DOB": "November 12, 1993", "POB": "City of Manila,NCR, CITY OF MANILA, FIRST DISTRICT", "PCN": "5073-0634-8709-1024" }, 
+				-->
+					
+					<address/>
+					<street/>
+					<chiefdom/>
+					<gender/>
+					<locality/>
+					<street2/>
+					<district/>
+					<city/>
+					<state/>
+					<postalCode/>
+					<zip/>
+					<fullName/>
+					<name/>
+					<dateOfBirth/>
+					<birthdate/>
+					<phone/>
+					<email/>
+					<id/>
+					<external_id/>
+					<verifyStatus/>
+					<verifyMessage/>
+					<successMessage/>
+					
+				</data>
+			</instance>
+			
+			<bind nodeset="/data/address" type="string"/>
+			
+			<bind nodeset="/data/gender" type="string"/>
+			<bind nodeset="/data/city" type="string"/>
+			<bind nodeset="/data/state" type="string"/>
+			<bind nodeset="/data/postalCode" type="string"/>
+			<bind nodeset="/data/fullName" type="string"/>
+			<bind nodeset="/data/dateOfBirth" type="string"/>
+			<bind nodeset="/data/phone" type="string"/>
+			<bind nodeset="/data/email" type="string"/>
+			<bind nodeset="/data/id" type="string"/>
+			<bind calculate="/data/external_id" nodeset="/data/id" type="string"/>
+			<bind nodeset="/data/verifyStatus" type="string"/>
+			<bind nodeset="/data/verifyMessage" type="string"/>
+			<bind nodeset="/data/successMessage" type="string"/>
+			<bind nodeset="/data/locality" type="string"/>
+			<bind calculate="/data/fullName" nodeset="/data/name" type="string"/>
+			<bind calculate="/data/address" nodeset="/data/street" type="string"/>
+			<bind calculate="/data/locality" nodeset="/data/street2" type="string"/>
+			<bind calculate="/data/postalCode" nodeset="/data/zip" type="string"/>
+			<bind calculate="/data/locality" nodeset="/data/district" type="string"/>
+			<bind calculate="/data/address" nodeset="/data/chiefdom" type="string"/>
+			<bind calculate="/data/dateOfBirth" nodeset="/data/birthdate" type="string"/>
+			
+		</model>
+	</h:head>
+	<h:body>
+		<group ref="/data"  intent="com.mosip.qrcodescanner.SECOND_ACTIVITY"  appearance="field-list">
+			<label>Click on the launch button to verify and scan the QR Code</label>
+			
+				
+			<input ref="/data/id" >
+				<label>VID</label>
+			</input>
+			<input ref="/data/fullName" >
+				<label>Name</label>
+			</input>
+			<input ref="/data/dateOfBirth" >
+				<label>Date Of Birth</label>
+			</input>
+			<input ref="/data/gender" >
+				<label>Gender</label>
+			</input>
+			<input ref="/data/address" >
+				<label>Address</label>
+			</input>
+			<input ref="/data/locality" >
+				<label>Locality</label>
+			</input>			
+			<input ref="/data/city" >
+				<label>City</label>
+			</input>
+			<input ref="/data/state" >
+				<label>State</label>
+			</input>
+			<input ref="/data/postalCode" >
+				<label>Postal Code</label>
+			</input>
+			<input ref="/data/phone" >
+				<label>Phone</label>
+			</input>
+			<input ref="/data/email" >
+				<label>Email</label>
+			</input>
+			
+			
+		</group>
+		
+		
+	</h:body>
+</h:html>
